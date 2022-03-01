@@ -20,7 +20,7 @@ class TipoDocumentoTest extends TestCase
     public function un_usuario_puede_ver_los_tipo_de_documento()
     {
 
-        $response = $this->getJson(route('tipo-documentos'));
+        $response = $this->getJson(route('tipo-documentos.get'));
 
         $response->assertJson([
             'data' => $this->tipoDocumentos->toArray()
@@ -31,7 +31,7 @@ class TipoDocumentoTest extends TestCase
     public function un_usuario_puede_ver_un_tipo_de_documento(){
         $tipoDocumento = $this->tipoDocumentos[0];
 
-        $response = $this->getJson(route('tipo-documentos', $tipoDocumento->id));
+        $response = $this->getJson(route('tipo-documentos.show', $tipoDocumento->id));
 
         $response->assertJson($tipoDocumento->toArray());
 
@@ -40,15 +40,16 @@ class TipoDocumentoTest extends TestCase
     /** @test */
     public function nombre_tipo_de_documento_valido()
     {
-        $this->withExceptionHandling();
+
         $name = 'nombre';
         $values = ['', [], 'cc1', '', $this->tipoDocumentos[0]->nombre];
 
         foreach ($values as $key => $value) {
 
-            $response = $this->postJson(route('tipo-documentos'), [
+            $response = $this->postJson(route('tipo-documentos.create'), [
                 $name => $value
             ]);
+
             $response->assertJsonStructure([
                 'errors' => [
                     $name
@@ -61,7 +62,7 @@ class TipoDocumentoTest extends TestCase
     public function un_usuario_puede_crear_un_tipo_de_documento()
     {
         $value = 'cc';
-        $response = $this->postJson(route('tipo-documentos'), [
+        $response = $this->postJson(route('tipo-documentos.create'), [
             'nombre' => $value
         ]);
 
@@ -74,7 +75,7 @@ class TipoDocumentoTest extends TestCase
     {
         $tipoDocumento = $this->tipoDocumentos[0];
 
-        $response = $this->putJson(route('tipo-documentos', $tipoDocumento->id), [
+        $response = $this->putJson(route('tipo-documentos.update', $tipoDocumento->id), [
             'nombre' => 'cc'
         ]);
 
@@ -91,7 +92,7 @@ class TipoDocumentoTest extends TestCase
 
         $tipoDocumento = $this->tipoDocumentos[0];
 
-        $response = $this->deleteJson(route('tipo-documentos', $tipoDocumento->id));
+        $response = $this->deleteJson(route('tipo-documentos.delete', $tipoDocumento->id));
 
         $this->assertDatabaseMissing('tipo_documentos', [
             'nombre' => $tipoDocumento->nombre

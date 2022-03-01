@@ -26,7 +26,7 @@ class TipoDocumentoRequest extends FormRequest
     {
         return [
             'nombre' => ['required','string', new AlphaSpace(),
-            "unique:tipo_documentos,nombre,".$this->tipoDocumento->id]
+            "unique:tipo_documentos,nombre,".optional($this->tipoDocumento)->id]
         ];
     }
 }

@@ -17,14 +17,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('tipo-documentos', 'TipoDocumentoController@index')->name('tipo-documentos.get');
+Route::get('tipo-documentos/{tipoDocumento}', 'TipoDocumentoController@show')->name('tipo-documentos.show');
+Route::post('tipo-documentos', 'TipoDocumentoController@create')->name('tipo-documentos.create');
+Route::put('tipo-documentos/{tipoDocumento}', 'TipoDocumentoController@update')->name('tipo-documentos.update');
+Route::delete('tipo-documentos/{tipoDocumento}', 'TipoDocumentoController@delete')->name('tipo-documentos.delete');
 
-
-
-Route::controller('TipoDocumentoController')->group(function () {
-
-    Route::get('tipo-documentos', 'index')->name('tipo-documentos');
-    Route::get('tipo-documentos/{tipoDocumento}', 'show')->name('tipo-documentos');
-    Route::post('tipo-documentos', 'create')->name('tipo-documentos');
-    Route::put('tipo-documentos/{tipoDocumento}', 'update')->name('tipo-documentos');
-    Route::delete('tipo-documentos/{tipoDocumento}', 'delete')->name('tipo-documentos');
-});
