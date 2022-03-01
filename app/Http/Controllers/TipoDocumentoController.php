@@ -20,6 +20,11 @@ class TipoDocumentoController extends Controller
       return $this->tipoDocumento->get();
     }
 
+    public function show(TipoDocumento $tipoDocumento){
+
+        return $tipoDocumento;
+    }
+
     public function create(TipoDocumentoRequest $request){
 
        return  $this->tipoDocumento->create($request->all());

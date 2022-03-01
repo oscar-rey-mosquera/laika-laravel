@@ -8,4 +8,8 @@ namespace App\Repositories;
         return $this->model::paginate($pagination);
     }
 
+    public function findById(int $id) {
+      return $this->model::findOrFail($id);
+    }
+
 }

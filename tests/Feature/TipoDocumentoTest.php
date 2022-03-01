@@ -28,6 +28,16 @@ class TipoDocumentoTest extends TestCase
     }
 
     /** @test */
+    public function un_usuario_puede_ver_un_tipo_de_documento(){
+        $tipoDocumento = $this->tipoDocumentos[0];
+
+        $response = $this->getJson(route('tipo-documentos', $tipoDocumento->id));
+
+        $response->assertJson($tipoDocumento->toArray());
+
+    }
+
+    /** @test */
     public function nombre_tipo_de_documento_valido()
     {
         $this->withExceptionHandling();

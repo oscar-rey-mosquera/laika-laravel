@@ -33,4 +33,5 @@ use App\Models\TipoDocumento;
         return $tipoDocumento;
     }
 
+
 }
