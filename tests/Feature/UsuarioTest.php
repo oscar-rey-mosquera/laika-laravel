@@ -11,17 +11,19 @@ class UsuarioTest extends TestCase
 {
     use RefreshDatabase;
 
+    private $headers = ['api-key-laika' => 'laika'];
+
     /** @test */
     public function consultar_usuarios()
     {
         $usuario = Usuario::factory()->create();
-        $response = $this->getJson(route('usuarios.get'));
+        $response = $this->getJson(route('usuarios.get'), $this->headers);
 
         $response->assertSee($usuario->nombre);
 
         /**cosultar un usuario */
 
-        $response = $this->getJson(route('usuarios.show', $usuario->id));
+        $response = $this->getJson(route('usuarios.show', $usuario->id),$this->headers);
 
         $response->assertSee($usuario->nombre);
         /*--- */
@@ -53,7 +55,7 @@ class UsuarioTest extends TestCase
             foreach ($values as $key => $value) {
 
                 $data[$name] = $value;
-                $response = $this->postJson(route('usuarios.create'), $data);
+                $response = $this->postJson(route('usuarios.create'), $data,$this->headers);
 
                 $response->assertJsonStructure([
                     'errors' => [
@@ -78,13 +80,13 @@ class UsuarioTest extends TestCase
         ];
 
 
-        $response = $this->postJson(route('usuarios.create'), $data);
+        $response = $this->postJson(route('usuarios.create'), $data,$this->headers);
 
         $response->assertSee($usuarioData->nombre);
 
 
 
-        $response = $this->deleteJson(route('usuarios.delete',$usuario->id));
+        $response = $this->deleteJson(route('usuarios.delete',$usuario->id),[],$this->headers);
 
         $response->assertSee($usuario->nombre);
 
@@ -106,7 +108,7 @@ class UsuarioTest extends TestCase
         ];
 
 
-        $response = $this->putJson(route('usuarios.update', $usuario->id), $data);
+        $response = $this->putJson(route('usuarios.update', $usuario->id), $data, $this->headers);
 
         $response->assertSee($usuarioData->nombre);
 

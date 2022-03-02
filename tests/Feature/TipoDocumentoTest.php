@@ -16,6 +16,7 @@ class TipoDocumentoTest extends TestCase
     {
         parent::setUp();
         $this->tipoDocumentos = TipoDocumento::factory(4)->create();
+        $this->headers = ['api-key-laika' => 'laika'];
     }
 
     /** @test */
@@ -24,13 +25,13 @@ class TipoDocumentoTest extends TestCase
 
         $tipoDocumento = $this->tipoDocumentos[0];
 
-        $response = $this->getJson(route('tipo-documentos.get'));
+        $response = $this->getJson(route('tipo-documentos.get'), $this->headers);
 
         $response->assertSee($tipoDocumento->nombre);
 
         /** consultar un tipo de documento */
 
-        $response = $this->getJson(route('tipo-documentos.show', $tipoDocumento->id));
+        $response = $this->getJson(route('tipo-documentos.show', $tipoDocumento->id),$this->headers);
 
         $response->assertSee($tipoDocumento->nombre);
     }
@@ -48,7 +49,7 @@ class TipoDocumentoTest extends TestCase
 
             $response = $this->postJson(route('tipo-documentos.create'), [
                 $name => $value
-            ]);
+            ],$this->headers);
 
             $response->assertJsonStructure([
                 'errors' => [
@@ -65,7 +66,7 @@ class TipoDocumentoTest extends TestCase
         $value = 'cc';
         $this->postJson(route('tipo-documentos.create'), [
             'nombre' => $value
-        ]);
+        ],$this->headers);
 
         $this->assertDatabaseHas('tipo_documentos', ['nombre' => $value]);
 
@@ -76,9 +77,9 @@ class TipoDocumentoTest extends TestCase
     {
         $tipoDocumento = $this->tipoDocumentos[0];
 
-       $response = $this->putJson(route('tipo-documentos.update', $tipoDocumento->id), [
+       $this->putJson(route('tipo-documentos.update', $tipoDocumento->id), [
             'nombre' => 'cc'
-        ]);
+        ],$this->headers);
 
 
 
@@ -88,7 +89,7 @@ class TipoDocumentoTest extends TestCase
 
 
           /** eliminar */
-        $this->deleteJson(route('tipo-documentos.delete', $tipoDocumento->id));
+        $this->deleteJson(route('tipo-documentos.delete', $tipoDocumento->id),[],$this->headers);
 
         $this->assertDatabaseMissing('tipo_documentos', [
             'nombre' => $tipoDocumento->nombre
