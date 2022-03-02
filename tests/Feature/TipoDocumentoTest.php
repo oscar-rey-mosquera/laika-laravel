@@ -61,8 +61,9 @@ class TipoDocumentoTest extends TestCase
     /** @test*/
     public function un_usuario_puede_crear_un_tipo_de_documento()
     {
+
         $value = 'cc';
-         $this->postJson(route('tipo-documentos.create'), [
+        $this->postJson(route('tipo-documentos.create'), [
             'nombre' => $value
         ]);
 
@@ -75,9 +76,10 @@ class TipoDocumentoTest extends TestCase
     {
         $tipoDocumento = $this->tipoDocumentos[0];
 
-        $this->putJson(route('tipo-documentos.update', $tipoDocumento->id), [
+       $response = $this->putJson(route('tipo-documentos.update', $tipoDocumento->id), [
             'nombre' => 'cc'
         ]);
+
 
 
         $this->assertDatabaseHas('tipo_documentos', [

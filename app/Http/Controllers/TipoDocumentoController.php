@@ -18,16 +18,17 @@ class TipoDocumentoController extends Controller
     public function index(){
 
       return $this->tipoDocumento->get();
+
     }
 
     public function show($id){
 
-        return $this->tipoDocumento->find_by_id($id);
+        return $this->tipoDocumento->findById($id);
     }
 
     public function create(TipoDocumentoRequest $request){
 
-       return  $this->tipoDocumento->create($request->all());
+       $response = $this->tipoDocumento->create($request->all());
     }
 
     public function update(TipoDocumentoRequest $request, $id){
@@ -39,4 +40,6 @@ class TipoDocumentoController extends Controller
 
         return $this->tipoDocumento->delete($id);
     }
+
+
 }

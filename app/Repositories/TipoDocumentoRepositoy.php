@@ -12,35 +12,65 @@ class TipoDocumentoRepositoy
 
     public function get()
     {
-        $data = DB::select('CALL get_tipo_documentos()');
+        try {
+            $data = DB::select('CALL get_tipo_documentos()');
 
-        return $data;
+            return $data;
+        } catch (\Throwable $th) {
+            $this->error();
+        }
     }
 
-    public function find_by_id(int $id)
+    public function findById(int $id)
     {
-        $data = DB::select("CALL get_tipo_documento_by_id({$id})");
+        try {
+            $data = DB::select("CALL get_tipo_documento_by_id({$id})");
 
-        return $data;
+            return $data;
+        } catch (\Throwable $th) {
+            $this->error();
+        }
     }
+
 
     public function create(array $data)
     {
-        $nombre = $data['nombre'];
-        DB::select("CALL crear_tipo_documento(?)", [$nombre]);
+        try {
+            $nombre = $data['nombre'];
+            DB::select("CALL crear_tipo_documento(?)", [$nombre]);
+        } catch (\Throwable $th) {
+            $this->error();
+        }
     }
 
 
-    public function update( array $data, int $id)
+    public function update(array $data, int $id)
     {
-        $nombre = $data['nombre'];
+        try {
+            $nombre = $data['nombre'];
 
-        DB::select("CALL actualizar_tipo_documento(?,?)",[$nombre, $id]);
+            DB::select("CALL actualizar_tipo_documento(?,?)", [$nombre, $id]);
 
+        } catch (\Throwable $th) {
+            $this->error();
+        }
     }
 
     public function delete(int $id)
     {
-          DB::select("CALL delete_tipo_documento_by_id({$id})");
+        try {
+            $data = $this->findById($id);
+
+            DB::select("CALL delete_tipo_documento_by_id({$id})");
+
+            return $data;
+        } catch (\Throwable $th) {
+            $this->error();
+        }
+    }
+
+    private function error()
+    {
+        return response()->json(['error' => 'Algo anda mal'], 500);
     }
 }
