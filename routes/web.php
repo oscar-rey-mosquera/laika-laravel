@@ -23,9 +23,9 @@ Route::get('/', function () {
 Route::middleware('check.token')->group(function () {
 
     Route::get('tipo-documentos', 'TipoDocumentoController@index')->name('tipo-documentos.get');
-    Route::get('tipo-documentos/{tipoDocumento}', 'TipoDocumentoController@show')->name('tipo-documentos.show');
+    Route::get('tipo-documentos/{id}', 'TipoDocumentoController@show')->name('tipo-documentos.show');
     Route::post('tipo-documentos', 'TipoDocumentoController@create')->name('tipo-documentos.create');
-    Route::put('tipo-documentos/{tipoDocumento}', 'TipoDocumentoController@update')->name('tipo-documentos.update');
+    Route::put('tipo-documentos/{id}', 'TipoDocumentoController@update')->name('tipo-documentos.update');
     Route::delete('tipo-documentos/{id}', 'TipoDocumentoController@delete')->name('tipo-documentos.delete');
 
 
