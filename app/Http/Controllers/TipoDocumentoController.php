@@ -20,9 +20,9 @@ class TipoDocumentoController extends Controller
       return $this->tipoDocumento->get();
     }
 
-    public function show(TipoDocumento $tipoDocumento){
+    public function show($id){
 
-        return $tipoDocumento;
+        return $this->tipoDocumento->find_by_id($id);
     }
 
     public function create(TipoDocumentoRequest $request){
@@ -30,13 +30,13 @@ class TipoDocumentoController extends Controller
        return  $this->tipoDocumento->create($request->all());
     }
 
-    public function update(TipoDocumentoRequest $request, TipoDocumento $tipoDocumento){
+    public function update(TipoDocumentoRequest $request, $id){
 
-        return $this->tipoDocumento->update($tipoDocumento, $request->all());
+        return $this->tipoDocumento->update($request->all(), $id);
     }
 
-    public function delete(TipoDocumento $tipoDocumento){
+    public function delete($id){
 
-        return $this->tipoDocumento->delete($tipoDocumento);
+        return $this->tipoDocumento->delete($id);
     }
 }

@@ -16,7 +16,6 @@ return new class extends Migration
         Schema::create('usuarios', function (Blueprint $table) {
             $table->id();
             $table->string('nombre');
-            $table->string('email');
             $table->string('documento');
             $table->foreignId('tipo_documento_id')->references('id')->on('tipo_documentos')->cascadeOnUpdate()->restrictOnDelete();
             $table->timestamps();
