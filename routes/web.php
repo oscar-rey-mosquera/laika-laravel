@@ -19,7 +19,6 @@ Route::get('/', function () {
 
 
 
-
 Route::middleware('check.token')->group(function () {
 
     Route::get('tipo-documentos', 'TipoDocumentoController@index')->name('tipo-documentos.get');

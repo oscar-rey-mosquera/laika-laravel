@@ -38,7 +38,7 @@ return new class extends Migration
 
         CREATE PROCEDURE `crear_tipo_documento` (nombrex VARCHAR(255))
         BEGIN
-        INSERT INTO tipo_documentos (nombre) VALUES (nombrex);
+        INSERT INTO tipo_documentos (nombre, created_at, updated_at) VALUES (nombrex, NOW(), NOW());
         END;
 
         CREATE PROCEDURE `actualizar_tipo_documento` (
@@ -46,7 +46,7 @@ return new class extends Migration
             idx INT
             )
         BEGIN
-        UPDATE tipo_documentos SET nombre = nombrex WHERE id = idx;
+        UPDATE tipo_documentos SET nombre = nombrex, updated_at=NOW() WHERE id = idx;
         END;
 
         ";
