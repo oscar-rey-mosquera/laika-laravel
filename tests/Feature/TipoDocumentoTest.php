@@ -34,6 +34,7 @@ class TipoDocumentoTest extends TestCase
         $response = $this->getJson(route('tipo-documentos.show', $tipoDocumento->id),$this->headers);
 
         $response->assertSee($tipoDocumento->nombre);
+
     }
 
 

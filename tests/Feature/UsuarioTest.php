@@ -27,6 +27,7 @@ class UsuarioTest extends TestCase
 
         $response->assertSee($usuario->nombre);
         /*--- */
+
     }
 
 
