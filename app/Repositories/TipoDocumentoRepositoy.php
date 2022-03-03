@@ -10,21 +10,17 @@ class TipoDocumentoRepositoy
 
     protected $model = TipoDocumento::class;
 
-    public function get()
+    public function get(int $paginate = 10)
     {
 
-            $data = DB::select('CALL get_tipo_documentos()');
-
-            return $data;
+            return TipoDocumento::paginate($paginate);
 
     }
 
     public function findById(int $id)
     {
 
-            $data = DB::select("CALL get_tipo_documento_by_id({$id})");
-
-            return $data;
+            return TipoDocumento::findOrFail($id);
 
     }
 
@@ -32,8 +28,7 @@ class TipoDocumentoRepositoy
     public function create(array $data)
     {
 
-            $nombre = $data['nombre'];
-            DB::select("CALL crear_tipo_documento(?)", [$nombre]);
+        TipoDocumento::create(['nombre' => $data['nombre']]);
 
 
     }
@@ -42,29 +37,18 @@ class TipoDocumentoRepositoy
     public function update(array $data, int $id)
     {
 
-            $nombre = $data['nombre'];
+            $tipo_documento = $this->findById($id);
 
-            DB::select("CALL actualizar_tipo_documento(?,?)", [$nombre, $id]);
+           $tipo_documento->update(['nombre' => $data['nombre']]);
 
 
     }
 
     public function delete(int $id)
     {
+            $tipo_documento = $this->findById($id);
 
-        try {
-
-            $data = $this->findById($id);
-
-            DB::select("CALL delete_tipo_documento_by_id({$id})");
-
-            return $data;
-        } catch (\Throwable $th) {
-
-            return response()
-             ->json(['error' => 'No se pudo eliminar el tipo de documento'], 422);
-        }
-
+             $tipo_documento->delete();
     }
 
 

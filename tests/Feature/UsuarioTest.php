@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\TipoDocumento;
 use Tests\TestCase;
 use App\Models\Usuario;
 use Illuminate\Support\Str;
@@ -16,17 +17,24 @@ class UsuarioTest extends TestCase
     /** @test */
     public function consultar_usuarios()
     {
-        $usuario = Usuario::factory()->create();
+        $tipo_documento = TipoDocumento::factory()->create();
+        $usuario = Usuario::factory()->create(['tipo_documento_id' => $tipo_documento->id]);
+
         $response = $this->getJson(route('usuarios.get'), $this->headers);
 
         $response->assertSee($usuario->nombre);
+        $response->assertSee($tipo_documento->nombre);
 
         /**cosultar un usuario */
 
         $response = $this->getJson(route('usuarios.show', $usuario->id),$this->headers);
 
         $response->assertSee($usuario->nombre);
+        $response->assertSee($tipo_documento->nombre);
         /*--- */
+
+        $response = $this->getJson(route('usuarios.show', 100),$this->headers);
+        $response->assertStatus(404);
 
     }
 
@@ -81,15 +89,14 @@ class UsuarioTest extends TestCase
         ];
 
 
-        $response = $this->postJson(route('usuarios.create'), $data,$this->headers);
-
-        $response->assertSee($usuarioData->nombre);
+         $this->postJson(route('usuarios.create'), $data,$this->headers);
 
 
+        $this->assertDatabaseHas('usuarios', ['documento' => $data['documento']]);
 
-        $response = $this->deleteJson(route('usuarios.delete',$usuario->id),[],$this->headers);
 
-        $response->assertSee($usuario->nombre);
+
+        $this->deleteJson(route('usuarios.delete',$usuario->id),[],$this->headers);
 
         $this->assertDatabaseMissing('usuarios', ['nombre' => $usuario->nombre]);
 
@@ -109,9 +116,9 @@ class UsuarioTest extends TestCase
         ];
 
 
-        $response = $this->putJson(route('usuarios.update', $usuario->id), $data, $this->headers);
+        $this->putJson(route('usuarios.update', $usuario->id), $data, $this->headers);
 
-        $response->assertSee($usuarioData->nombre);
+        $this->assertDatabaseHas('usuarios', ['nombre' => $usuarioData->nombre]);
 
     }
 

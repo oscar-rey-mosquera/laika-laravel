@@ -15,11 +15,11 @@ class UsuarioController extends Controller
     }
 
     public function index() {
-        return $this->usuario->getWithRelations();
+        return $this->usuario->get();
     }
 
     public function show($id){
-        return $this->usuario->findByIdWithRelations($id);
+        return $this->usuario->findById($id);
     }
 
     public function create(UsuarioRequest $request){

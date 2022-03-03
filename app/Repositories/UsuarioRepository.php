@@ -2,40 +2,53 @@
 
 namespace App\Repositories;
 
-use App\Models\TipoDocumento;
-use App\Models\Usuario;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
-class UsuarioRepository extends Repository
+class UsuarioRepository
 {
 
-    protected $model = Usuario::class;
 
     protected $relations = ['tipo_documento'];
 
-    public function create(array $data): Usuario
+    public function get()
     {
 
-        return $this->model::create([
+        $data = DB::select('CALL get_usuarios()');
 
-            'nombre' => $data['nombre'],
-            'documento' => $data['documento'],
-            'tipo_documento_id' => $data['tipo_documento_id']
-        ]);
+        return $data;
+    }
+
+    public function findById(int $id)
+    {
+
+        $data = DB::select("CALL get_usuario_by_id({$id})");
+
+        if (count($data) === 0) {
+            throw new ModelNotFoundException("Recurso con id {$id} no encontrado");
+        }
+
+        return $data;
+    }
+
+    public function create(array $data)
+    {
+
+        DB::select("CALL crear_usuario(?,?,?)", [$data['nombre'], $data['documento'], $data['tipo_documento_id']]);
     }
 
 
-    public function update(int $id, array $data): Usuario
+    public function update(int $id, array $data)
     {
         $usuario = $this->findById($id);
 
-        $usuario->update([
-            'nombre' => $data['nombre'] ?? $usuario->nombre,
-            'documento' => $data['documento'] ?? $usuario->documento,
-            'tipo_documento_id' => $data['tipo_documento_id'] ?? $usuario->tipo_documento_id,
-        ]);
-
-        return $usuario;
+        DB::select("CALL actualizar_usuario(?,?,?,?)", [$data['nombre'], $data['documento'], $data['tipo_documento_id'], $usuario[0]->id]);
     }
 
 
+    public function  delete(int $id)
+    {
+        $usuario = $this->findById($id);
+        DB::select("CALL delete_usuarios({$usuario[0]->id})");
+    }
 }
