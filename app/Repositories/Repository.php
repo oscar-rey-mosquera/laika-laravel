@@ -4,9 +4,9 @@ namespace App\Repositories;
  abstract class Repository {
 
 
-    public function getWithRelations($pagination = 10){
+    public function getWithRelations(){
 
-        return $this->model::with($this->relations)->paginate($pagination);
+        return $this->model::with($this->relations)->get();
     }
 
     public function findByIdWithRelations(int $id) {

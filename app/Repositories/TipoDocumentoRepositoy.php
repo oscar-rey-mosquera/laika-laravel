@@ -52,11 +52,18 @@ class TipoDocumentoRepositoy
     public function delete(int $id)
     {
 
+        try {
+
             $data = $this->findById($id);
 
             DB::select("CALL delete_tipo_documento_by_id({$id})");
 
             return $data;
+        } catch (\Throwable $th) {
+
+            return response()
+             ->json(['error' => 'No se pudo eliminar el tipo de documento'], 422);
+        }
 
     }
 
