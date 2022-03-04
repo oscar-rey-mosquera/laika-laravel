@@ -6,11 +6,10 @@ use App\Models\TipoDocumento;
 use Tests\TestCase;
 use App\Models\Usuario;
 use Illuminate\Support\Str;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+
 
 class UsuarioTest extends TestCase
 {
-    use RefreshDatabase;
 
     private $headers = ['api-key-laika' => 'laika'];
 
@@ -25,30 +24,47 @@ class UsuarioTest extends TestCase
         $response->assertSee($usuario->nombre);
         $response->assertSee($tipo_documento->nombre);
 
-        /**cosultar un usuario */
+        return [$tipo_documento, $usuario];
 
-        $response = $this->getJson(route('usuarios.show', $usuario->id),$this->headers);
+    }
 
-        $response->assertSee($usuario->nombre);
-        $response->assertSee($tipo_documento->nombre);
-        /*--- */
+    /** @test*/
+    public function error_usuario_no_encontrado(){
 
         $response = $this->getJson(route('usuarios.show', 100),$this->headers);
         $response->assertStatus(404);
+    }
 
+    /**
+     *  @test
+     * @depends consultar_usuarios
+     *
+    */
+    public function consultar_usuario($data) {
+
+         /**cosultar un usuario */
+         list($tipo_documento, $usuario) = $data;
+
+         $response = $this->getJson(route('usuarios.show', $usuario->id),$this->headers);
+
+         $response->assertSee($usuario->nombre);
+         $response->assertSee($tipo_documento->nombre);
+         /*--- */
     }
 
 
 
-    /** @test */
-    public function crear_usuario_valido()
+    /**
+     *  @test
+     * @depends consultar_usuarios
+     */
+    public function crear_usuario_valido($data)
     {
-
-        $usuario = Usuario::factory()->create();
+        list(,$usuario) = $data;
         $string_256 = Str::random(256);
 
         $datas = [
-            'nombre' => ['', [], $string_256],
+            'nombre' => ['', [],'jhon123', $string_256],
             'documento' => ['', [], $usuario->documento, $string_256],
             'tipo_documento_id' => ['', 'ds', [], 100]
         ];
@@ -75,11 +91,12 @@ class UsuarioTest extends TestCase
         }
     }
 
-    /** @test */
-    public function crear_usuario_y_eliminar()
+    /** @test
+     * @depends consultar_usuarios
+    */
+    public function crear_usuario($data)
     {
-
-        $usuario = Usuario::factory()->create();
+        list($tipo_documento, $usuario) = $data;
         $usuarioData = Usuario::factory()->make();
 
         $data = [
@@ -95,22 +112,22 @@ class UsuarioTest extends TestCase
         $this->assertDatabaseHas('usuarios', ['documento' => $data['documento']]);
 
 
+      return [$tipo_documento, $usuario, $usuarioData];
 
-        $this->deleteJson(route('usuarios.delete',$usuario->id),[],$this->headers);
-
-        $this->assertDatabaseMissing('usuarios', ['nombre' => $usuario->nombre]);
 
 
     }
 
-    /** @test */
-    public function actualizar_usuario(){
+    /**
+     * @test
+     * @depends crear_usuario
+     */
+    public function actualizar_usuario($data){
 
-        $usuario = Usuario::factory()->create();
-        $usuarioData = Usuario::factory()->make();
+        list(, $usuario,) = $data;
 
         $data = [
-            'nombre' => $usuarioData->nombre,
+            'nombre' => 'romeo',
             'documento' => $usuario->documento,
             'tipo_documento_id' => $usuario->tipo_documento_id
         ];
@@ -118,8 +135,18 @@ class UsuarioTest extends TestCase
 
         $this->putJson(route('usuarios.update', $usuario->id), $data, $this->headers);
 
-        $this->assertDatabaseHas('usuarios', ['nombre' => $usuarioData->nombre]);
+        $this->assertDatabaseHas('usuarios', ['nombre' => $data['nombre']]);
 
+    }
+
+    /** @test
+     * @depends crear_usuario
+    */
+    public function eliminar_usuario($data){
+        list(,$usuario, ) = $data;
+        $this->deleteJson(route('usuarios.delete',$usuario->id),[],$this->headers);
+
+        $this->assertDatabaseMissing('usuarios', ['nombre' => $usuario->nombre]);
     }
 
 

@@ -3,9 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\TipoDocumentoRequest;
-use App\Models\TipoDocumento;
 use App\Repositories\TipoDocumentoRepositoy;
-use Illuminate\Http\Request;
+
 
 class TipoDocumentoController extends Controller
 {
@@ -28,7 +27,7 @@ class TipoDocumentoController extends Controller
 
     public function create(TipoDocumentoRequest $request){
 
-       $response = $this->tipoDocumento->create($request->all());
+       return $this->tipoDocumento->create($request->all());
     }
 
     public function update(TipoDocumentoRequest $request, $id){

@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\AlphaSpace;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UsuarioRequest extends FormRequest
@@ -24,7 +25,7 @@ class UsuarioRequest extends FormRequest
     public function rules()
     {
         return [
-            'nombre' => ['required', 'string', 'max:255'],
+            'nombre' => ['required', 'string', new AlphaSpace(),'max:255'],
             'documento' => ['required', 'string','max:255', "unique:usuarios,documento,{$this->id}"],
             'tipo_documento_id' => ['required', 'numeric', 'exists:tipo_documentos,id']
         ];

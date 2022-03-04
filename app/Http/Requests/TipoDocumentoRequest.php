@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests;
 
-use App\Rules\AlphaSpace;
+
 use Illuminate\Foundation\Http\FormRequest;
 
 class TipoDocumentoRequest extends FormRequest
@@ -25,7 +25,7 @@ class TipoDocumentoRequest extends FormRequest
     public function rules()
     {
         return [
-            'nombre' => ['required','string', new AlphaSpace(),
+            'nombre' => ['required','string', 'max:255',
             "unique:tipo_documentos,nombre,".optional($this->tipoDocumento)->id]
         ];
     }

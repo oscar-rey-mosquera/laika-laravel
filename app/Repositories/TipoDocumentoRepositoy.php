@@ -3,7 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\TipoDocumento;
-use Illuminate\Support\Facades\DB;
+
 
 class TipoDocumentoRepositoy
 {
@@ -13,7 +13,7 @@ class TipoDocumentoRepositoy
     public function get(int $paginate = 10)
     {
 
-            return TipoDocumento::paginate($paginate);
+            return TipoDocumento::all();
 
     }
 
@@ -28,7 +28,7 @@ class TipoDocumentoRepositoy
     public function create(array $data)
     {
 
-        TipoDocumento::create(['nombre' => $data['nombre']]);
+       return TipoDocumento::create(['nombre' => $data['nombre']]);
 
 
     }
