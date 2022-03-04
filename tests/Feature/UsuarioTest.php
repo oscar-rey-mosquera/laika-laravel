@@ -2,14 +2,16 @@
 
 namespace Tests\Feature;
 
-use App\Models\TipoDocumento;
 use Tests\TestCase;
 use App\Models\Usuario;
 use Illuminate\Support\Str;
+use App\Models\TipoDocumento;
+use Illuminate\Foundation\Testing\WithFaker;
 
 
 class UsuarioTest extends TestCase
 {
+    use WithFaker;
 
     private $headers = ['api-key-laika' => 'laika'];
 
@@ -66,7 +68,7 @@ class UsuarioTest extends TestCase
         $datas = [
             'nombre' => ['', [],'jhon123', $string_256],
             'documento' => ['', [], $usuario->documento, $string_256],
-            'tipo_documento_id' => ['', 'ds', [], 100]
+            'tipo_documento_id' => ['', 'ds', [], $this->faker->randomNumber(5)]
         ];
 
 

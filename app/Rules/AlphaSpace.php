@@ -25,7 +25,7 @@ class AlphaSpace implements Rule
      */
     public function passes($attribute, $value)
     {
-        return is_string($value) && preg_match('/^[A-Za-z ñ]+$/u', $value);
+        return is_string($value) && preg_match('/^[A-Za-z ñ.]+$/u', $value);
     }
 
     /**
